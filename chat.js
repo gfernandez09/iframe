@@ -59,31 +59,35 @@ function handleChatbaseResponse(botMessage, userMessage) {
     conversation.push({ content: botMessage, role: 'received' });
 
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
-    renderConversation(); // Renderizar la conversación
+    renderConversation(botMessage,userMessage); // Renderizar la conversación
 }
 
-// Esta función renderizará la conversación en el chat
-function renderConversation() {
-    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
-    var messageWindow = document.getElementById('message-window');
-    messageWindow.innerHTML = ''; // Limpiar el contenido actual del contenedor de la conversación
+function renderConversation(botResponse, userResponse) {
+    // Asumiendo que messageWindow y input son elementos del DOM
+    var messageWindow = document.getElementById('messageWindow'); // Reemplaza 'messageWindow' con el ID de tu contenedor de mensajes
+    var input = document.getElementById('inputField'); // Reemplaza 'inputField' con el ID de tu campo de entrada
 
-    conversation.forEach(item => {
-        var messageElement = document.createElement('div');
+    var userMessage = document.createElement('div');
+    userMessage.classList.add('message', 'sent');
+    userMessage.textContent = userResponse;
+    messageWindow.appendChild(userMessage);
 
-        // Agregar la clase correspondiente al rol del mensaje
-        messageElement.classList.add('message', item.role.toLowerCase());
+    const inputValue = input.value;
+    input.value = '';
 
-        // Crear un párrafo para el contenido del mensaje
-        var messageContent = document.createElement('p');
-        messageContent.textContent = item.role === 'User' ? `User: ${item.content}` : `Traveltool Bot Assistant: ${item.content}`;
+    // Mostrar la respuesta del bot después de un segundo (puedes ajustar este tiempo según tu preferencia)
+    setTimeout(function() {
+        var botMessage = document.createElement('div');
+        botMessage.classList.add('message', 'received');
+        botMessage.textContent = botResponse;
+        messageWindow.appendChild(botMessage);
+        messageWindow.scrollTop = messageWindow.scrollHeight;
+    }, 1000);
 
-        // Agregar contenido al elemento del mensaje
-        messageElement.appendChild(messageContent);
-        messageWindow.appendChild(messageElement);
-    });
+    // Enfocar el campo de entrada después de enviar un mensaje (puede considerar quitar esto si es molesto para la experiencia del usuario)
+    input.focus();
+    messageWindow.scrollTop = messageWindow.scrollHeight;
 }
-
 
 // Esta función guardará la conversación en el almacenamiento local
 function saveConversationToLocalStorage(conversation) {
