@@ -50,12 +50,13 @@ async function sendMessageToChatbase(userMessage) {
 }
 // Esta función manejará la respuesta del bot y la agregará a la conversación
 function handleChatbaseResponse(botMessage, userMessage) {
-    var conversation = [];
+    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
 
-    // Crear mensaje del usuario
-    conversation.push({ content: userMessage, role: 'User' });
-    // Crear respuesta del bot
-    conversation.push({ content: botMessage, role: 'Traveltool Bot Assistant' });
+    // Agregar mensaje del usuario a la conversación con su respectivo estilo
+    conversation.push({ content: userMessage, role: 'sent user-message' });
+
+    // Agregar respuesta del bot a la conversación con su respectivo estilo
+    conversation.push({ content: botMessage, role: 'received bot-message' });
 
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
     renderConversation(); // Renderizar la conversación
@@ -69,11 +70,15 @@ function renderConversation() {
 
     conversation.forEach(item => {
         var messageElement = document.createElement('div');
-        messageElement.classList.add('message', item.role.toLowerCase()); // Aplicar clase correspondiente al rol
 
+        // Agregar la clase correspondiente al rol del mensaje
+        messageElement.classList.add('message', item.role);
+
+        // Crear un párrafo para el contenido del mensaje
         var messageContent = document.createElement('p');
         messageContent.textContent = item.content;
 
+        // Agregar contenido al elemento del mensaje
         messageElement.appendChild(messageContent);
         messageWindow.appendChild(messageElement);
     });
@@ -88,3 +93,5 @@ function saveConversationToLocalStorage(conversation) {
 function getConversationFromLocalStorage() {
     return JSON.parse(localStorage.getItem('conversation')) || [];
 }
+
+// Resto de tu código...
