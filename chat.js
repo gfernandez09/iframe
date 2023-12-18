@@ -49,17 +49,26 @@ async function sendMessageToChatbase(userMessage) {
 function handleChatbaseResponse(message) {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
 
-    var role = 'assistant'; // Por defecto, asumimos que el mensaje es del asistente (bot)
+    var role = 'Traveltool Bot Assistant'; // Por defecto, asumimos que el mensaje es del asistente (bot)
     var userMessage = document.getElementById('chat-message').value.trim();
 
-    if (userMessage !== '' && message === userMessage) {
-        role = 'user'; // Si el mensaje recibido es el mismo que el mensaje del usuario, cambiamos el rol a usuario
+    // Comprobar si el último mensaje de la conversación es igual al mensaje actual
+    if (conversation.length > 0 && conversation[conversation.length - 1].content === message) {
+        return; // Evitar repetir mensajes
+    }
+
+    // Si el mensaje actual es diferente al último mensaje del usuario, entonces es del asistente (bot)
+    if (userMessage !== '' && message !== userMessage) {
+        role = 'Traveltool Bot Assistant';
+    } else {
+        role = 'User'; // Si el mensaje recibido es el mismo que el mensaje del usuario, entonces es del usuario
     }
 
     conversation.push({ content: message, role: role }); // Agregar el mensaje a la conversación con el rol correspondiente
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
     renderConversation(); // Renderizar la conversación
 }
+
 
 function getConversationFromLocalStorage() {
     return JSON.parse(localStorage.getItem('conversation')) || [];
