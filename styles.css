@@ -25,12 +25,15 @@ body {
     position: relative;
     color: #333;
 }
+
 .sent {
-    background-color: rgba(211, 211, 211, 0.7);
+    background-color: #6c757d;
+    color: white;
     align-self: flex-end;
 }
+
 .received {
-    background-color: rgba(211, 211, 211, 0.7);
+    background-color: #f7f7f7;
     align-self: flex-start;
 }
 #chat-input {
