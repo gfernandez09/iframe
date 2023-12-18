@@ -12,15 +12,18 @@ body {
     justify-content: center;
 }
 
+/* Resto de tu CSS permanece igual */
+
 #message-window {
-    flex-grow: 1;
+    width: 50%; /* Ancho fijo */
+    height: 50%; /* Altura fija */
     overflow-y: auto;
     padding: 20px;
-    max-width: 80%;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .message {
     margin-bottom: 10px;
