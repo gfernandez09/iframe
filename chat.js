@@ -16,7 +16,6 @@ async function sendMessage() {
             console.error('Error al enviar el mensaje:', error);
         }
     }
-    userMessageInput.value = '';
 }
 
 async function sendMessageToChatbase(userMessage) {
