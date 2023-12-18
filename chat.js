@@ -27,7 +27,6 @@ async function sendMessageToChatbase(userMessage) {
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json'
             },
