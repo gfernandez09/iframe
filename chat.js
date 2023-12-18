@@ -64,15 +64,18 @@ function renderConversation() {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
     var messageWindow = document.getElementById('message-window');
     messageWindow.innerHTML = ''; // Limpiar el contenido actual del contenedor de la conversación
+
     conversation.forEach(item => {
         var messageElement = document.createElement('div');
         messageElement.classList.add('message', item.role);
-        messageElement.textContent = `${item.role === 'assistant' ? 'Traveltool Bot Assistant' : 'User'}: ${item.content}`;
+        messageElement.textContent = item.content;
+
+        if (item.role === 'assistant') {
+            messageElement.classList.add('left'); // Establecer el mensaje del asistente a la izquierda
+        } else {
+            messageElement.classList.add('right'); // Establecer el mensaje del usuario a la derecha
+        }
+
         messageWindow.appendChild(messageElement);
     });
-}
-
-function clearConversation() {
-    localStorage.removeItem('conversation'); // Limpiar la conversación del local storage
-    renderConversation(); // Renderizar la conversación vacía
 }
