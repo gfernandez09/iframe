@@ -51,8 +51,8 @@ async function sendMessageToChatbase(userMessage) {
 
 
 function renderConversation(botResponse, userResponse) {
-    var messageWindow = document.getElementById('messageWindow'); // Reemplaza 'messageWindow' con el ID de tu contenedor de mensajes
-    var input = document.getElementById('inputField'); // Reemplaza 'inputField' con el ID de tu campo de entrada
+    var messageWindow = document.getElementById('message-window');
+    var input = document.getElementById('chat-message');
 
     // Mostrar el mensaje del usuario a la derecha
     var userMessage = document.createElement('div');
