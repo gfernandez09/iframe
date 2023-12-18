@@ -29,7 +29,7 @@
     });
 
     var chatFrame = document.createElement('iframe');
-    chatFrame.src = 'https://iframe-chat-test.vercel.app/';
+    chatFrame.src = 'https://iframe-tan.vercel.app/';
     Object.assign(chatFrame.style, {
         border: 'none',
         width: '100%', // Ancho del iframe al 100% del contenedor
