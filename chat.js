@@ -49,7 +49,7 @@ function handleChatbaseResponse(message) {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
     conversation.push({ content: message, role: 'assistant' }); // Agregar el mensaje del bot a la conversación
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
-    renderConversation(conversation); // Renderizar la conversación
+    renderConversation(); // Renderizar la conversación
 }
 
 function getConversationFromLocalStorage() {
@@ -60,7 +60,8 @@ function saveConversationToLocalStorage(conversation) {
     localStorage.setItem('conversation', JSON.stringify(conversation));
 }
 
-function renderConversation(conversation) {
+function renderConversation() {
+    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
     var messageWindow = document.getElementById('message-window');
     messageWindow.innerHTML = ''; // Limpiar el contenido actual del contenedor de la conversación
     conversation.forEach(item => {
@@ -69,4 +70,9 @@ function renderConversation(conversation) {
         messageElement.textContent = `${item.role === 'assistant' ? 'Traveltool Bot Assistant' : 'User'}: ${item.content}`;
         messageWindow.appendChild(messageElement);
     });
+}
+
+function clearConversation() {
+    localStorage.removeItem('conversation'); // Limpiar la conversación del local storage
+    renderConversation(); // Renderizar la conversación vacía
 }
