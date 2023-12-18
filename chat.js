@@ -1,22 +1,26 @@
-function onEnterPress(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-}
+let isFirstMessageSent = false; // Variable para controlar si el primer mensaje ha sido enviado
 
-// Esta función enviará el mensaje del usuario al bot
 async function sendMessage() {
     var input = document.getElementById('chat-message');
     var userMessage = input.value.trim();
 
     if (userMessage !== '') {
         try {
+            if (!isFirstMessageSent) {
+                const messageWindow = document.getElementById('message-window');
+                messageWindow.style.display = 'block'; // Mostrar el contenedor de mensajes al enviar el primer mensaje
+                isFirstMessageSent = true;
+            }
+
             await sendMessageToChatbase(userMessage); // Enviar el mensaje del usuario al bot
+            renderConversation("", "User: " + userMessage); // Renderizar el mensaje del usuario en la interfaz
             input.value = ''; // Vaciar el input de texto después de enviar el mensaje
         } catch (error) {
             console.error('Error al enviar el mensaje:', error);
         }
     }
+
+    input.focus();
 }
 
 // Esta función enviará el mensaje al bot y manejará la respuesta
