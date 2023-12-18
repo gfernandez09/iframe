@@ -43,30 +43,18 @@ async function sendMessageToChatbase(userMessage) {
         }
 
         const data = await response.text();
-        handleChatbaseResponse(data, userMessage); // Manejar la respuesta del bot
+        renderConversation(data,userMessage); // Manejar la respuesta del bot
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
 
-function handleChatbaseResponse(botMessage, userMessage) {
-    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
-
-    // Agregar mensaje del usuario a la conversación con su respectivo estilo
-    conversation.push({ content: userMessage, role: 'sent' });
-
-    // Agregar respuesta del bot a la conversación con su respectivo estilo
-    conversation.push({ content: botMessage, role: 'received' });
-
-    saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
-    renderConversation(botMessage,userMessage); // Renderizar la conversación
-}
 
 function renderConversation(botResponse, userResponse) {
-    // Asumiendo que messageWindow y input son elementos del DOM
     var messageWindow = document.getElementById('messageWindow'); // Reemplaza 'messageWindow' con el ID de tu contenedor de mensajes
     var input = document.getElementById('inputField'); // Reemplaza 'inputField' con el ID de tu campo de entrada
 
+    // Mostrar el mensaje del usuario a la derecha
     var userMessage = document.createElement('div');
     userMessage.classList.add('message', 'sent');
     userMessage.textContent = userResponse;
@@ -75,7 +63,7 @@ function renderConversation(botResponse, userResponse) {
     const inputValue = input.value;
     input.value = '';
 
-    // Mostrar la respuesta del bot después de un segundo (puedes ajustar este tiempo según tu preferencia)
+    // Mostrar la respuesta del bot a la izquierda después de un segundo (puedes ajustar este tiempo según tu preferencia)
     setTimeout(function() {
         var botMessage = document.createElement('div');
         botMessage.classList.add('message', 'received');
@@ -87,7 +75,17 @@ function renderConversation(botResponse, userResponse) {
     // Enfocar el campo de entrada después de enviar un mensaje (puede considerar quitar esto si es molesto para la experiencia del usuario)
     input.focus();
     messageWindow.scrollTop = messageWindow.scrollHeight;
+
+    // Obtener la conversación actual del localStorage
+    var conversation = getConversationFromLocalStorage() || [];
+    
+    // Agregar los nuevos mensajes a la conversación
+    conversation.push({ botMessage, userMessage });
+
+    // Guardar la conversación actualizada en el localStorage
+    saveConversationToLocalStorage(conversation);
 }
+
 
 // Esta función guardará la conversación en el almacenamiento local
 function saveConversationToLocalStorage(conversation) {
