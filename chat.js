@@ -48,15 +48,15 @@ async function sendMessageToChatbase(userMessage) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
-// Esta función manejará la respuesta del bot y la agregará a la conversación
+
 function handleChatbaseResponse(botMessage, userMessage) {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
 
     // Agregar mensaje del usuario a la conversación con su respectivo estilo
-    conversation.push({ content: userMessage, role: 'sent user-message' });
+    conversation.push({ content: userMessage, role: 'sent' });
 
     // Agregar respuesta del bot a la conversación con su respectivo estilo
-    conversation.push({ content: botMessage, role: 'received bot-message' });
+    conversation.push({ content: botMessage, role: 'received' });
 
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
     renderConversation(); // Renderizar la conversación
@@ -72,17 +72,18 @@ function renderConversation() {
         var messageElement = document.createElement('div');
 
         // Agregar la clase correspondiente al rol del mensaje
-        messageElement.classList.add('message', item.role);
+        messageElement.classList.add('message', item.role.toLowerCase());
 
         // Crear un párrafo para el contenido del mensaje
         var messageContent = document.createElement('p');
-        messageContent.textContent = item.content;
+        messageContent.textContent = item.role === 'User' ? `User: ${item.content}` : `Traveltool Bot Assistant: ${item.content}`;
 
         // Agregar contenido al elemento del mensaje
         messageElement.appendChild(messageContent);
         messageWindow.appendChild(messageElement);
     });
 }
+
 
 // Esta función guardará la conversación en el almacenamiento local
 function saveConversationToLocalStorage(conversation) {
@@ -93,5 +94,3 @@ function saveConversationToLocalStorage(conversation) {
 function getConversationFromLocalStorage() {
     return JSON.parse(localStorage.getItem('conversation')) || [];
 }
-
-// Resto de tu código...

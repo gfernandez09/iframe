@@ -24,19 +24,18 @@ body {
     clear: both;
 }
 
-.sent.user-message {
+.message.sent {
     background-color: #6c757d;
     color: white;
     align-self: flex-end;
     border-top-right-radius: 0;
 }
 
-.received.bot-message {
+.message.received {
     background-color: #f7f7f7;
     align-self: flex-start;
     border-top-left-radius: 0;
 }
-
 .message p {
     margin: 0;
 }
