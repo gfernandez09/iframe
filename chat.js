@@ -80,3 +80,13 @@ function renderConversation() {
         messageWindow.appendChild(messageElement);
     });
 }
+
+// Esta función guardará la conversación en el almacenamiento local
+function saveConversationToLocalStorage(conversation) {
+    localStorage.setItem('conversation', JSON.stringify(conversation));
+}
+
+// Esta función obtendrá la conversación del almacenamiento local
+function getConversationFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('conversation')) || [];
+}
