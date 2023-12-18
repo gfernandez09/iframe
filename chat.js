@@ -21,7 +21,7 @@ async function sendMessage() {
 
 async function sendMessageToChatbase(userMessage) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
-    const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/SendMessage";
+    const apiUrl = " https://76dd-145-1-219-48.ngrok-free.app/SendMessage";
 
     try {
         const response = await fetch(apiUrl, {
