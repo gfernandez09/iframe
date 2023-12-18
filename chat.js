@@ -54,27 +54,26 @@ function renderConversation(botResponse, userResponse) {
     var messageWindow = document.getElementById('message-window');
     var input = document.getElementById('chat-message');
 
-    // Mostrar el mensaje del usuario a la derecha
-    var userMessage = document.createElement('div');
-    userMessage.classList.add('message', 'sent');
-    userMessage.textContent = userResponse;
-    messageWindow.appendChild(userMessage);
+   // Mostrar el mensaje del usuario
+   var formattedUserMessage = "User: " + userResponse;
+   var userMessage = document.createElement('div');
+   userMessage.classList.add('message', 'sent');
+   userMessage.textContent = formattedUserMessage;
+   messageWindow.appendChild(userMessage);
 
-    const inputValue = input.value;
-    input.value = '';
+   // Mostrar la respuesta del bot
+   var formattedBotMessage = "Quonversa AI: " + botResponse;
+   setTimeout(function() {
+       var botMessage = document.createElement('div');
+       botMessage.classList.add('message', 'received');
+       botMessage.textContent = formattedBotMessage;
+       messageWindow.appendChild(botMessage);
+       messageWindow.scrollTop = messageWindow.scrollHeight;
+   }, 1000);
 
-    // Mostrar la respuesta del bot a la izquierda después de un segundo (puedes ajustar este tiempo según tu preferencia)
-    setTimeout(function() {
-        var botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'received');
-        botMessage.textContent = botResponse;
-        messageWindow.appendChild(botMessage);
-        messageWindow.scrollTop = messageWindow.scrollHeight;
-    }, 1000);
-
-    // Enfocar el campo de entrada después de enviar un mensaje (puede considerar quitar esto si es molesto para la experiencia del usuario)
-    input.focus();
-    messageWindow.scrollTop = messageWindow.scrollHeight;
+   input.value = '';
+   input.focus();
+   messageWindow.scrollTop = messageWindow.scrollHeight;
 
     // Obtener la conversación actual del localStorage
     var conversation = getConversationFromLocalStorage() || [];
@@ -85,7 +84,6 @@ function renderConversation(botResponse, userResponse) {
     // Guardar la conversación actualizada en el localStorage
     saveConversationToLocalStorage(conversation);
 }
-
 
 // Esta función guardará la conversación en el almacenamiento local
 function saveConversationToLocalStorage(conversation) {
