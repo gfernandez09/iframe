@@ -48,7 +48,6 @@ async function sendMessageToChatbase(userMessage) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
-
 // Esta función manejará la respuesta del bot y la agregará a la conversación
 function handleChatbaseResponse(botMessage, userMessage) {
     var conversation = [];
