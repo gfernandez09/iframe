@@ -1,3 +1,9 @@
+function onEnterPress(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
 // Esta función enviará el mensaje del usuario al bot
 async function sendMessage() {
     var input = document.getElementById('chat-message');
