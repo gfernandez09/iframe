@@ -22,7 +22,7 @@ async function sendMessage() {
 // Esta función enviará el mensaje al bot y manejará la respuesta
 async function sendMessageToChatbase(userMessage) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
-    const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
+    const apiUrl = "https://76dd-145-1-219-48.ngrok-free.app/Assistant/SendMessage";
 
     try {
         const response = await fetch(apiUrl, {
@@ -48,7 +48,6 @@ async function sendMessageToChatbase(userMessage) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
-
 
 function renderConversation(botResponse, userResponse) {
     var messageWindow = document.getElementById('message-window');
