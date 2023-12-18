@@ -4,12 +4,14 @@ function onEnterPress(event) {
     }
 }
 
+// Esta función enviará el mensaje del usuario al bot
 async function sendMessage() {
     var input = document.getElementById('chat-message');
-    var message = input.value.trim();
-    if (message !== '') {
+    var userMessage = input.value.trim();
+
+    if (userMessage !== '') {
         try {
-            await sendMessageToChatbase(message); // Enviar el mensaje del usuario al bot
+            await sendMessageToChatbase(userMessage); // Enviar el mensaje del usuario al bot
             input.value = ''; // Vaciar el input de texto después de enviar el mensaje
         } catch (error) {
             console.error('Error al enviar el mensaje:', error);
@@ -17,6 +19,7 @@ async function sendMessage() {
     }
 }
 
+// Esta función enviará el mensaje al bot y manejará la respuesta
 async function sendMessageToChatbase(userMessage) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://76dd-145-1-219-48.ngrok-free.app/Assistant/SendMessage";
@@ -40,36 +43,27 @@ async function sendMessageToChatbase(userMessage) {
         }
 
         const data = await response.text();
-        handleChatbaseResponse(data);
+        handleChatbaseResponse(data, userMessage); // Manejar la respuesta del bot
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
 
-function handleChatbaseResponse(message) {
+// Esta función manejará la respuesta del bot y la agregará a la conversación
+function handleChatbaseResponse(message, userMessage) {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
 
-    var userMessage = document.getElementById('chat-message').value.trim();
-
-    // Si el mensaje actual es diferente al último mensaje del usuario, entonces es del asistente (bot)
-    if (userMessage !== '' && message !== userMessage) {
-        conversation.push({ content: message, role: 'Traveltool Bot Assistant' });
+    if (userMessage !== message) {
+        conversation.push({ content: message, role: 'Traveltool Bot Assistant' }); // Si el mensaje recibido es diferente al enviado por el usuario, es del bot
     } else {
-        conversation.push({ content: message, role: 'User' }); // Si el mensaje recibido es el mismo que el mensaje del usuario, entonces es del usuario
+        conversation.push({ content: message, role: 'User' }); // Si el mensaje recibido es el mismo que el enviado por el usuario, es del usuario
     }
 
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
     renderConversation(); // Renderizar la conversación
 }
 
-function getConversationFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('conversation')) || [];
-}
-
-function saveConversationToLocalStorage(conversation) {
-    localStorage.setItem('conversation', JSON.stringify(conversation));
-}
-
+// Esta función renderizará la conversación en el chat
 function renderConversation() {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
     var messageWindow = document.getElementById('message-window');
@@ -85,24 +79,4 @@ function renderConversation() {
         messageElement.appendChild(messageContent);
         messageWindow.appendChild(messageElement);
     });
-
-    alignMessages(); // Llamar a la función para alinear los mensajes después de que se agreguen al DOM
 }
-
-function alignMessages() {
-    var messages = document.querySelectorAll('.message'); // Seleccionar todos los mensajes
-
-    var previousRole = null;
-    messages.forEach(message => {
-        var currentRole = message.classList.contains('traveltool bot assistant') ? 'received' : 'sent';
-
-        if (previousRole !== null && currentRole !== previousRole) {
-            message.style.clear = 'both'; // Limpiar flotación para evitar que los mensajes se superpongan
-        }
-
-        message.classList.add(currentRole); // Alinear mensajes según el remitente
-        previousRole = currentRole;
-    });
-}
-
-
