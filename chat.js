@@ -9,10 +9,7 @@ async function sendMessage() {
     var message = input.value.trim();
     if (message !== '') {
         try {
-            var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
-            conversation.push({ content: message, role: 'user' }); // Agregar el mensaje del usuario a la conversación
-            saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
-            await sendMessageToChatbase(conversation); // Enviar la conversación completa con el mensaje del usuario al bot
+            await sendMessageToChatbase(message); // Enviar el mensaje del usuario al bot
             input.value = ''; // Vaciar el input de texto después de enviar el mensaje
         } catch (error) {
             console.error('Error al enviar el mensaje:', error);
@@ -20,7 +17,7 @@ async function sendMessage() {
     }
 }
 
-async function sendMessageToChatbase(conversation) {
+async function sendMessageToChatbase(userMessage) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://76dd-145-1-219-48.ngrok-free.app/Assistant/SendMessage";
 
@@ -32,7 +29,8 @@ async function sendMessageToChatbase(conversation) {
             },
             body: JSON.stringify({
                 chatbotId: chatbotId,
-                messages: conversation // Enviar la conversación completa con el mensaje del usuario
+                message: userMessage,
+                user: "user"
             })
         });
 
@@ -42,10 +40,16 @@ async function sendMessageToChatbase(conversation) {
         }
 
         const data = await response.text();
-        handleChatbaseResponse(data, 'assistant'); // Manejar la respuesta como un mensaje del bot
+        handleChatbaseResponse(data);
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
     }
+}
+function handleChatbaseResponse(message) {
+    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
+    conversation.push({ content: message, role: 'assistant' }); // Agregar el mensaje del bot a la conversación
+    saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
+    renderConversation(conversation); // Renderizar la conversación
 }
 
 function getConversationFromLocalStorage() {
@@ -54,12 +58,6 @@ function getConversationFromLocalStorage() {
 
 function saveConversationToLocalStorage(conversation) {
     localStorage.setItem('conversation', JSON.stringify(conversation));
-}
-function handleChatbaseResponse(message, role) {
-    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
-    conversation.push({ content: message, role: role }); // Agregar el mensaje del bot a la conversación
-    saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
-    renderConversation(conversation); // Renderizar la conversación
 }
 
 function renderConversation(conversation) {
