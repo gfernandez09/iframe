@@ -77,15 +77,19 @@ function renderConversation() {
 
     conversation.forEach(item => {
         var messageElement = document.createElement('div');
-        messageElement.classList.add('message', item.role);
-        messageElement.textContent = item.content;
+        messageElement.classList.add('message', item.role.toLowerCase()); // Aplicar clase correspondiente al rol
 
-        if (item.role === 'assistant') {
-            messageElement.classList.add('received'); // Establecer el mensaje del asistente a la izquierda
+        var messageContent = document.createElement('p');
+        messageContent.textContent = item.content;
+
+        messageElement.appendChild(messageContent);
+        if (item.role.toLowerCase() === 'traveltool bot assistant') {
+            messageElement.classList.add('received'); // Alinear mensajes del bot a la izquierda
         } else {
-            messageElement.classList.add('sent'); // Establecer el mensaje del usuario a la derecha
+            messageElement.classList.add('sent'); // Alinear mensajes del usuario a la derecha
         }
 
         messageWindow.appendChild(messageElement);
     });
 }
+
