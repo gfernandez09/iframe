@@ -83,13 +83,26 @@ function renderConversation() {
         messageContent.textContent = item.content;
 
         messageElement.appendChild(messageContent);
-        if (item.role.toLowerCase() === 'traveltool bot assistant') {
-            messageElement.classList.add('received'); // Alinear mensajes del bot a la izquierda
-        } else {
-            messageElement.classList.add('sent'); // Alinear mensajes del usuario a la derecha
-        }
-
         messageWindow.appendChild(messageElement);
     });
+
+    alignMessages(); // Llamar a la función para alinear los mensajes después de que se agreguen al DOM
 }
+
+function alignMessages() {
+    var messages = document.querySelectorAll('.message'); // Seleccionar todos los mensajes
+
+    var previousRole = null;
+    messages.forEach(message => {
+        var currentRole = message.classList.contains('traveltool bot assistant') ? 'received' : 'sent';
+
+        if (previousRole !== null && currentRole !== previousRole) {
+            message.style.clear = 'both'; // Limpiar flotación para evitar que los mensajes se superpongan
+        }
+
+        message.classList.add(currentRole); // Alinear mensajes según el remitente
+        previousRole = currentRole;
+    });
+}
+
 
