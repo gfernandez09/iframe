@@ -1,9 +1,3 @@
-function onEnterPress(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-}
-
 // Esta función enviará el mensaje del usuario al bot
 async function sendMessage() {
     var input = document.getElementById('chat-message');
@@ -50,14 +44,13 @@ async function sendMessageToChatbase(userMessage) {
 }
 
 // Esta función manejará la respuesta del bot y la agregará a la conversación
-function handleChatbaseResponse(message, userMessage) {
-    var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
+function handleChatbaseResponse(botMessage, userMessage) {
+    var conversation = [];
 
-    if (userMessage !== message) {
-        conversation.push({ content: message, role: 'Traveltool Bot Assistant' }); // Si el mensaje recibido es diferente al enviado por el usuario, es del bot
-    } else {
-        conversation.push({ content: message, role: 'User' }); // Si el mensaje recibido es el mismo que el enviado por el usuario, es del usuario
-    }
+    // Crear mensaje del usuario
+    conversation.push({ content: userMessage, role: 'User' });
+    // Crear respuesta del bot
+    conversation.push({ content: botMessage, role: 'Traveltool Bot Assistant' });
 
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
     renderConversation(); // Renderizar la conversación
