@@ -40,8 +40,7 @@ async function sendMessageToChatbase(userMessage) {
             throw new Error(errorData.message);
         }
 
-        const data = await response.json();
-        console.log(data)
+        const data = await response.text()
         handleChatbaseResponse(data.text);
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
