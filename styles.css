@@ -18,24 +18,32 @@ body {
     align-items: flex-start;
 }
 .message {
-    max-width: 60%;
+    max-width: 70%;
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 8px;
     position: relative;
     color: #333;
+    clear: both;
 }
 
 .sent {
     background-color: #6c757d;
     color: white;
     align-self: flex-end;
+    border-top-right-radius: 0;
 }
 
 .received {
     background-color: #f7f7f7;
     align-self: flex-start;
+    border-top-left-radius: 0;
 }
+
+.message p {
+    margin: 0;
+}
+
 #chat-input {
     display: flex;
     padding: 10px;

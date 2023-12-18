@@ -45,9 +45,18 @@ async function sendMessageToChatbase(userMessage) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
+
 function handleChatbaseResponse(message) {
     var conversation = getConversationFromLocalStorage(); // Obtener la conversación actual del local storage
-    conversation.push({ content: message, role: 'assistant' }); // Agregar el mensaje del bot a la conversación
+
+    var role = 'assistant'; // Por defecto, asumimos que el mensaje es del asistente (bot)
+    var userMessage = document.getElementById('chat-message').value.trim();
+
+    if (userMessage !== '' && message === userMessage) {
+        role = 'user'; // Si el mensaje recibido es el mismo que el mensaje del usuario, cambiamos el rol a usuario
+    }
+
+    conversation.push({ content: message, role: role }); // Agregar el mensaje a la conversación con el rol correspondiente
     saveConversationToLocalStorage(conversation); // Guardar la conversación actualizada en el local storage
     renderConversation(); // Renderizar la conversación
 }
@@ -71,9 +80,9 @@ function renderConversation() {
         messageElement.textContent = item.content;
 
         if (item.role === 'assistant') {
-            messageElement.classList.add('left'); // Establecer el mensaje del asistente a la izquierda
+            messageElement.classList.add('received'); // Establecer el mensaje del asistente a la izquierda
         } else {
-            messageElement.classList.add('right'); // Establecer el mensaje del usuario a la derecha
+            messageElement.classList.add('sent'); // Establecer el mensaje del usuario a la derecha
         }
 
         messageWindow.appendChild(messageElement);

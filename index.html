@@ -11,7 +11,8 @@
         <div id="message-window"></div>
         <div id="chat-input">
             <input type="text" id="chat-message" placeholder="Escribe tu mensaje aquí..." onkeypress="onEnterPress(event)">
-            <button onclick="sendMessage()">Enviar</button>
+            <button onclick="sendMessage(); document.getElementById('chat-message').value = ''; ">Enviar</button>
         </div>
     </body>
+    
 </html>
