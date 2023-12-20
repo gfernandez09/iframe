@@ -29,16 +29,11 @@ async function sendMessage() {
 }
 
 async function sendMessageToChatbase(userMessage) {
-    const input = document.getElementById('chat-message');
     const messageWindow = document.getElementById('message-window');
 
     try {
         // Mostrar "Escribiendo..." antes de enviar el mensaje al bot
-        const writingIndicator = document.createElement('div');
-        writingIndicator.classList.add('message', 'received');
-        writingIndicator.textContent = 'Escribiendo...';
-        messageWindow.appendChild(writingIndicator);
-        messageWindow.scrollTop = messageWindow.scrollHeight;
+        renderConversation('Escribiendo...', userMessage);
 
         const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
         const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
@@ -62,16 +57,20 @@ async function sendMessageToChatbase(userMessage) {
 
         const data = await response.text();
         renderConversation(data, userMessage); // Manejar la respuesta del bot
-        messageWindow.removeChild(writingIndicator); // Eliminar "Escribiendo..."
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
 
-
 function renderConversation(botResponse, userResponse) {
     var messageWindow = document.getElementById('message-window');
     var input = document.getElementById('chat-message');
+
+    // Eliminar el mensaje "Escribiendo..." si existe
+    var writingIndicator = messageWindow.querySelector('.writing-indicator');
+    if (writingIndicator) {
+        messageWindow.removeChild(writingIndicator);
+    }
 
     // Mostrar el mensaje del usuario
     var formattedUserMessage = userResponse;
@@ -80,25 +79,13 @@ function renderConversation(botResponse, userResponse) {
     userMessage.textContent = formattedUserMessage;
     messageWindow.appendChild(userMessage);
 
-    // Mostrar "Escribiendo..." antes de la respuesta del bot (será eliminado cuando llegue la respuesta real)
-    var writingIndicator = document.createElement('div');
-    writingIndicator.classList.add('message', 'received');
-    writingIndicator.textContent = 'Escribiendo...';
-    messageWindow.appendChild(writingIndicator);
+    // Mostrar la respuesta del bot
+    var formattedBotMessage = botResponse;
+    var botMessage = document.createElement('div');
+    botMessage.classList.add('message', 'received');
+    botMessage.textContent = formattedBotMessage;
+    messageWindow.appendChild(botMessage);
     messageWindow.scrollTop = messageWindow.scrollHeight;
-
-    // Mostrar la respuesta del bot después de un pequeño retraso simulando la solicitud al servidor
-    setTimeout(function () {
-        // Eliminar "Escribiendo..." antes de agregar la respuesta real del bot
-        messageWindow.removeChild(writingIndicator);
-
-        var formattedBotMessage = botResponse;
-        var botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'received');
-        botMessage.textContent = formattedBotMessage;
-        messageWindow.appendChild(botMessage);
-        messageWindow.scrollTop = messageWindow.scrollHeight;
-    }, 1500);
 
     input.value = '';
     input.focus();
