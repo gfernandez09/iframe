@@ -72,13 +72,6 @@ function renderConversation(botResponse, userResponse) {
         messageWindow.removeChild(writingIndicator);
     }
 
-    // Mostrar el mensaje del usuario
-    var formattedUserMessage = userResponse;
-    var userMessage = document.createElement('div');
-    userMessage.classList.add('message', 'sent');
-    userMessage.textContent = formattedUserMessage;
-    messageWindow.appendChild(userMessage);
-
     // Mostrar la respuesta del bot
     var formattedBotMessage = botResponse;
     var botMessage = document.createElement('div');
@@ -86,6 +79,15 @@ function renderConversation(botResponse, userResponse) {
     botMessage.textContent = formattedBotMessage;
     messageWindow.appendChild(botMessage);
     messageWindow.scrollTop = messageWindow.scrollHeight;
+
+    // Mostrar el mensaje del usuario solo si no es el mismo que la respuesta del bot
+    if (userResponse !== botResponse) {
+        var formattedUserMessage = userResponse;
+        var userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'sent');
+        userMessage.textContent = formattedUserMessage;
+        messageWindow.appendChild(userMessage);
+    }
 
     input.value = '';
     input.focus();
