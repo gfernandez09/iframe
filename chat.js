@@ -32,7 +32,8 @@ async function sendMessageToChatbase(userMessage) {
     const messageWindow = document.getElementById('message-window');
 
     try {
-        renderConversation(userMessage, 'Escribiendo...');
+        // Mostrar "Escribiendo..." antes de enviar el mensaje al bot
+        renderConversation('Escribiendo...', userMessage);
 
         const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
         const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
@@ -62,7 +63,7 @@ async function sendMessageToChatbase(userMessage) {
 }
 
 function renderConversation(botResponse, userResponse) {
-    var messageWindow = document.getElementById('message-window');
+ var messageWindow = document.getElementById('message-window');
 
     var formattedUserMessage = userResponse;
     var userMessage = document.createElement('div');
