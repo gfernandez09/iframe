@@ -32,8 +32,7 @@ async function sendMessageToChatbase(userMessage) {
     const messageWindow = document.getElementById('message-window');
 
     try {
-        // Mostrar "Escribiendo..." antes de enviar el mensaje al bot
-        renderConversation('Escribiendo...', userMessage);
+        renderConversation(userMessage, 'Escribiendo...');
 
         const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
         const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
@@ -64,33 +63,31 @@ async function sendMessageToChatbase(userMessage) {
 
 function renderConversation(botResponse, userResponse) {
     var messageWindow = document.getElementById('message-window');
-    var input = document.getElementById('chat-message');
 
-    // Eliminar el mensaje "Escribiendo..." si existe
+    var formattedUserMessage = userResponse;
+    var userMessage = document.createElement('div');
+    userMessage.classList.add('message', 'sent');
+    userMessage.textContent = formattedUserMessage;
+
+    var formattedBotMessage = botResponse;
+    var botMessage = document.createElement('div');
+    botMessage.classList.add('message', 'received');
+    botMessage.textContent = formattedBotMessage;
+
+    // Remove previous "Escribiendo..." message if it exists
     var writingIndicator = messageWindow.querySelector('.writing-indicator');
     if (writingIndicator) {
         messageWindow.removeChild(writingIndicator);
     }
 
-    // Mostrar la respuesta del bot
-    var formattedBotMessage = botResponse;
-    var botMessage = document.createElement('div');
-    botMessage.classList.add('message', 'received');
-    botMessage.textContent = formattedBotMessage;
-    messageWindow.appendChild(botMessage);
-    messageWindow.scrollTop = messageWindow.scrollHeight;
-
-    // Mostrar el mensaje del usuario solo si no es el mismo que la respuesta del bot
-    if (userResponse !== botResponse) {
-        var formattedUserMessage = userResponse;
-        var userMessage = document.createElement('div');
-        userMessage.classList.add('message', 'sent');
-        userMessage.textContent = formattedUserMessage;
-        messageWindow.appendChild(userMessage);
+    // Remove previous user message if it exists
+    var lastMessage = messageWindow.lastElementChild;
+    if (lastMessage && lastMessage.classList.contains('sent')) {
+        messageWindow.removeChild(lastMessage);
     }
 
-    input.value = '';
-    input.focus();
+    messageWindow.appendChild(userMessage);
+    messageWindow.appendChild(botMessage);
     messageWindow.scrollTop = messageWindow.scrollHeight;
 
     // Obtener la conversación actual del localStorage
