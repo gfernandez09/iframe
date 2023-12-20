@@ -1,3 +1,12 @@
+document.addEventListener('DOMContentLoaded', function() {
+    showWelcomeMessage();
+});
+
+function showWelcomeMessage() {
+    var welcomeMessage = "¡Hola! Soy el Asistente de Traveltool creado por Quonversa. Mi función es ayudarte. ¿En qué puedo ayudarte?";
+    renderConversation(welcomeMessage, ''); // Mostrar mensaje de bienvenida
+}
+
 function onEnterPress(event) {
     if (event.key === "Enter") {
         sendMessage();
@@ -53,22 +62,31 @@ function renderConversation(botResponse, userResponse) {
     var messageWindow = document.getElementById('message-window');
     var input = document.getElementById('chat-message');
 
-   // Mostrar el mensaje del usuario
-    var formattedUserMessage = "User: " + userResponse;
-    var userMessage = document.createElement('div');
-    userMessage.classList.add('message', 'sent');
-    userMessage.textContent = formattedUserMessage;
-    messageWindow.appendChild(userMessage);
-
-    // Mostrar la respuesta del bot
-    var formattedBotMessage = "Quonversa AI: " + botResponse;
-    setTimeout(function() {
-        var botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'received');
-        botMessage.textContent = formattedBotMessage;
-        messageWindow.appendChild(botMessage);
+    // Mensaje de bienvenida del bot al inicio del chat
+    if (messageWindow.children.length === 0) {
+        var botWelcomeMessage = document.createElement('div');
+        botWelcomeMessage.classList.add('message', 'received');
+        botWelcomeMessage.textContent = botResponse;
+        messageWindow.appendChild(botWelcomeMessage);
         messageWindow.scrollTop = messageWindow.scrollHeight;
-    }, 1000);
+    }else{
+        // Mostrar el mensaje del usuario
+        var formattedUserMessage = userResponse;
+        var userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'sent');
+        userMessage.textContent = formattedUserMessage;
+        messageWindow.appendChild(userMessage);
+
+        // Mostrar la respuesta del bot
+        var formattedBotMessage = botResponse;
+        setTimeout(function() {
+            var botMessage = document.createElement('div');
+            botMessage.classList.add('message', 'received');
+            botMessage.textContent = formattedBotMessage;
+            messageWindow.appendChild(botMessage);
+            messageWindow.scrollTop = messageWindow.scrollHeight;
+        }, 1000);
+    }
 
     input.value = '';
     input.focus();
