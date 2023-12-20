@@ -102,7 +102,7 @@ function saveConversationToLocalStorage(conversation) {
 
 function removeTypingIndicator() {
     const messageWindow = document.getElementById('message-window');
-    const typingIndicator = messageWindow.querySelector('.received');
+    const typingIndicator = messageWindow.querySelector('.message.received:last-child');
 
     if (typingIndicator.textContent === '...') {
         messageWindow.removeChild(typingIndicator);
