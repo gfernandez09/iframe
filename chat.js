@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function showWelcomeMessage() {
-    var welcomeMessage = "¡Hola! Soy el Asistente de Traveltool creado por Quonversa. Mi función es ayudarte. ¿En qué puedo ayudarte?";
+    var welcomeMessage = "¡Hola! Soy el Asistente de Traveltool creado por Quonversa. ¿En qué puedo ayudarte?";
     renderConversation(welcomeMessage, ''); // Mostrar mensaje de bienvenida
 }
 
