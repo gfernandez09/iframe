@@ -28,12 +28,21 @@ async function sendMessage() {
     }
 }
 
-// Esta función enviará el mensaje al bot y manejará la respuesta
 async function sendMessageToChatbase(userMessage) {
-    const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
-    const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
+    const input = document.getElementById('chat-message');
+    const messageWindow = document.getElementById('message-window');
 
     try {
+        // Mostrar "Escribiendo..." antes de enviar el mensaje al bot
+        const writingIndicator = document.createElement('div');
+        writingIndicator.classList.add('message', 'received');
+        writingIndicator.textContent = 'Escribiendo...';
+        messageWindow.appendChild(writingIndicator);
+        messageWindow.scrollTop = messageWindow.scrollHeight;
+
+        const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
+        const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
+
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -52,41 +61,44 @@ async function sendMessageToChatbase(userMessage) {
         }
 
         const data = await response.text();
-        renderConversation(data,userMessage); // Manejar la respuesta del bot
+        renderConversation(data, userMessage); // Manejar la respuesta del bot
+        messageWindow.removeChild(writingIndicator); // Eliminar "Escribiendo..."
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
 
+
 function renderConversation(botResponse, userResponse) {
     var messageWindow = document.getElementById('message-window');
     var input = document.getElementById('chat-message');
 
-    // Mensaje de bienvenida del bot al inicio del chat
-    if (messageWindow.children.length === 0) {
-        var botWelcomeMessage = document.createElement('div');
-        botWelcomeMessage.classList.add('message', 'received');
-        botWelcomeMessage.textContent = botResponse;
-        messageWindow.appendChild(botWelcomeMessage);
-        messageWindow.scrollTop = messageWindow.scrollHeight;
-    }else{
-        // Mostrar el mensaje del usuario
-        var formattedUserMessage = userResponse;
-        var userMessage = document.createElement('div');
-        userMessage.classList.add('message', 'sent');
-        userMessage.textContent = formattedUserMessage;
-        messageWindow.appendChild(userMessage);
+    // Mostrar el mensaje del usuario
+    var formattedUserMessage = userResponse;
+    var userMessage = document.createElement('div');
+    userMessage.classList.add('message', 'sent');
+    userMessage.textContent = formattedUserMessage;
+    messageWindow.appendChild(userMessage);
 
-        // Mostrar la respuesta del bot
+    // Mostrar "Escribiendo..." antes de la respuesta del bot (será eliminado cuando llegue la respuesta real)
+    var writingIndicator = document.createElement('div');
+    writingIndicator.classList.add('message', 'received');
+    writingIndicator.textContent = 'Escribiendo...';
+    messageWindow.appendChild(writingIndicator);
+    messageWindow.scrollTop = messageWindow.scrollHeight;
+
+    // Mostrar la respuesta del bot después de un pequeño retraso simulando la solicitud al servidor
+    setTimeout(function () {
+        // Eliminar "Escribiendo..." antes de agregar la respuesta real del bot
+        messageWindow.removeChild(writingIndicator);
+
         var formattedBotMessage = botResponse;
-        setTimeout(function() {
-            var botMessage = document.createElement('div');
-            botMessage.classList.add('message', 'received');
-            botMessage.textContent = formattedBotMessage;
-            messageWindow.appendChild(botMessage);
-            messageWindow.scrollTop = messageWindow.scrollHeight;
-        }, 1000);
-    }
+        var botMessage = document.createElement('div');
+        botMessage.classList.add('message', 'received');
+        botMessage.textContent = formattedBotMessage;
+        messageWindow.appendChild(botMessage);
+        messageWindow.scrollTop = messageWindow.scrollHeight;
+    }, 1500);
 
     input.value = '';
     input.focus();
