@@ -42,6 +42,9 @@ async function sendMessageToChatbase(userMessage) {
         const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
         const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
 
+        // Mostrar el mensaje de "Escribiendo..." del bot
+        renderConversation('...', 'bot');
+
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
