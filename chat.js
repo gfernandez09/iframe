@@ -1,10 +1,18 @@
+document.addEventListener('DOMContentLoaded', function() {
+    showWelcomeMessage();
+});
+
+function showWelcomeMessage() {
+    var welcomeMessage = "¡Hola! Soy el Asistente de Traveltool creado por Quonversa. ¿En qué puedo ayudarte?";
+    renderConversation(welcomeMessage, 'bot'); // Mostrar mensaje de bienvenida
+}
+
 function onEnterPress(event) {
     if (event.key === "Enter") {
         sendMessage();
     }
 }
 
-// Esta función enviará el mensaje del usuario al bot
 async function sendMessage() {
     var input = document.getElementById('chat-message');
     var userMessage = input.value.trim();
@@ -12,6 +20,14 @@ async function sendMessage() {
     if (userMessage !== '') {
         try {
             input.value = '';
+
+            // Mostrar el mensaje del usuario en la ventana de chat
+            renderConversation(userMessage, 'user'); // Añadir mensaje del usuario
+
+            // Mostrar el mensaje de "Escribiendo..." del bot
+            renderConversation('...', 'bot');
+
+            // Enviar el mensaje del usuario al bot y esperar la respuesta
             await sendMessageToChatbase(userMessage);
         } catch (error) {
             console.error('Error al enviar el mensaje:', error);
@@ -19,12 +35,13 @@ async function sendMessage() {
     }
 }
 
-// Esta función enviará el mensaje al bot y manejará la respuesta
 async function sendMessageToChatbase(userMessage) {
-    const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
-    const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
+    const messageWindow = document.getElementById('message-window');
 
     try {
+        const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
+        const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
+
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -43,53 +60,51 @@ async function sendMessageToChatbase(userMessage) {
         }
 
         const data = await response.text();
-        renderConversation(data,userMessage); // Manejar la respuesta del bot
+
+        // Eliminar el mensaje de "Escribiendo..." del bot
+        removeTypingIndicator();
+
+        // Mostrar la respuesta del bot en la ventana de chat
+        renderConversation(data, 'bot');
     } catch (error) {
         console.error('Error al enviar el mensaje:', error);
     }
 }
 
-function renderConversation(botResponse, userResponse) {
+function renderConversation(message, sender) {
     var messageWindow = document.getElementById('message-window');
-    var input = document.getElementById('chat-message');
+    var messageDiv = document.createElement('div');
+    var messageType = sender === 'bot' ? 'received' : 'sent';
 
-   // Mostrar el mensaje del usuario
-    var formattedUserMessage = "User: " + userResponse;
-    var userMessage = document.createElement('div');
-    userMessage.classList.add('message', 'sent');
-    userMessage.textContent = formattedUserMessage;
-    messageWindow.appendChild(userMessage);
+    messageDiv.classList.add('message', messageType);
 
-    // Mostrar la respuesta del bot
-    var formattedBotMessage = "Quonversa AI: " + botResponse;
-    setTimeout(function() {
-        var botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'received');
-        botMessage.textContent = formattedBotMessage;
-        messageWindow.appendChild(botMessage);
-        messageWindow.scrollTop = messageWindow.scrollHeight;
-    }, 1000);
+    if (sender === 'user') {
+        messageDiv.style.textAlign = 'right'; // Alinea el mensaje del usuario a la derecha
+    }
 
-    input.value = '';
-    input.focus();
+    messageDiv.textContent = message;
+    messageWindow.appendChild(messageDiv);
     messageWindow.scrollTop = messageWindow.scrollHeight;
 
-    // Obtener la conversación actual del localStorage
+    // Guardar la conversación en el almacenamiento local
     var conversation = getConversationFromLocalStorage() || [];
-    
-    // Agregar los nuevos mensajes a la conversación
-    conversation.push({ botMessage, userMessage });
-
-    // Guardar la conversación actualizada en el localStorage
+    conversation.push({ message: message, sender: sender });
     saveConversationToLocalStorage(conversation);
 }
 
-// Esta función guardará la conversación en el almacenamiento local
+function getConversationFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('conversation')) || [];
+}
+
 function saveConversationToLocalStorage(conversation) {
     localStorage.setItem('conversation', JSON.stringify(conversation));
 }
 
-// Esta función obtendrá la conversación del almacenamiento local
-function getConversationFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('conversation')) || [];
+function removeTypingIndicator() {
+    const messageWindow = document.getElementById('message-window');
+    const typingIndicator = messageWindow.querySelector('.message.received:last-child');
+
+    if (typingIndicator.textContent === '...') {
+        messageWindow.removeChild(typingIndicator);
+    }
 }
