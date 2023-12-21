@@ -46,6 +46,7 @@ async function sendMessageToBotAssistant(fullConversation) {
     const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
 
     console.log(fullConversation);
+    console.log(JSON.stringify(fullConversation));
 
     const response = await fetch(apiUrl, {
         method: 'POST',
@@ -53,7 +54,7 @@ async function sendMessageToBotAssistant(fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            messages: fullConversation,
+            messages: JSON.stringify(fullConversation),
             chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
