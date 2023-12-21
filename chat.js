@@ -54,7 +54,7 @@ async function sendMessageToBotAssistant(fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            messages: JSON.stringify(fullConversation),
+            message: JSON.stringify(fullConversation),
             chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
