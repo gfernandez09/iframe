@@ -45,6 +45,8 @@ async function sendMessageToChatbase(fullConversation) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
 
+    console.log(fullConversation);
+
     const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
