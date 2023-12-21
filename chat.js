@@ -43,7 +43,7 @@ async function sendMessage() {
 
 async function sendMessageToBotAssistant(fullConversation) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
-    const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
+    const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
 
     console.log(fullConversation);
     console.log(JSON.stringify(fullConversation));
