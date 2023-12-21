@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function showWelcomeMessage() {
-    renderConversation("¡Hola! Soy el Asistente de Traveltool creado por Quonversa. ¿En qué puedo ayudarte?", 'bot');
+    renderConversation("¡Hola! Soy el Asistente de Traveltool creado por Quonversa. ¿En qué puedo ayudarte?", 'assistant');
 }
 
 function onEnterPress(event) {
@@ -30,11 +30,11 @@ async function sendMessage() {
         try {
             input.value = '';
             renderConversation(userMessage, 'user');
-            renderConversation('...', 'bot');
+            renderConversation('...', 'assistant');
             const fullConversation = getConversationFromLocalStorage();
             const response = await sendMessageToBotAssistant(fullConversation);
             removeTypingIndicator();
-            renderConversation(response, 'bot');
+            renderConversation(response, 'assistant');
         } catch (error) {
             console.error('Error al enviar el mensaje:', error);
         }
