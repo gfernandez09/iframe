@@ -73,7 +73,7 @@ async function sendMessageToBotAssistant(fullConversation) {
 
 function renderConversation(message, sender) {
     const messageWindow = document.getElementById('message-window');
-    const messageType = sender === 'bot' ? 'received' : 'sent';
+    const messageType = sender === 'assistant' ? 'received' : 'sent';
     const messageDiv = createMessageElement(message, messageType, sender);
     messageWindow.appendChild(messageDiv);
     messageWindow.scrollTop = messageWindow.scrollHeight;
