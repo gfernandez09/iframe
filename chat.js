@@ -32,7 +32,7 @@ async function sendMessage() {
             renderConversation(userMessage, 'user');
             renderConversation('...', 'bot');
             const fullConversation = getConversationFromLocalStorage();
-            const response = await sendMessageToChatbase(fullConversation);
+            const response = await sendMessageToBotAssistant(fullConversation);
             removeTypingIndicator();
             renderConversation(response, 'bot');
         } catch (error) {
@@ -41,7 +41,7 @@ async function sendMessage() {
     }
 }
 
-async function sendMessageToChatbase(fullConversation) {
+async function sendMessageToBotAssistant(fullConversation) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
 
@@ -53,7 +53,7 @@ async function sendMessageToChatbase(fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            messages: fullConversation,
+            messages: JSON.stringify(fullConversation),
             chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
