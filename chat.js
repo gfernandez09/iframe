@@ -39,7 +39,7 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
     
-    let messages;
+    let messagesString;
     
     if (fullConversation.length === 0) {
         messages = [
@@ -51,6 +51,8 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
         messages = [...conversationMessages, { content: userMessage, role: 'user' }];
     }
 
+    messagesString = JSON.stringify(messages);
+    
     const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
