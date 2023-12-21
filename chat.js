@@ -44,18 +44,6 @@ async function sendMessage() {
 async function sendMessageToChatbase(userMessage, fullConversation) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
-    
-    let messages;
-
-    if (fullConversation.length === 0) {
-        messages = [
-            { content: userMessage, role: 'user' },
-            { content: 'How can I help you?', role: 'assistant' }
-        ];
-    } else {
-        const conversationMessages = fullConversation.map((message) => ({ content: message.content, role: message.role }));
-        messages = [...conversationMessages, { content: userMessage, role: 'user' }];
-    }
 
     const response = await fetch(apiUrl, {
         method: 'POST',
@@ -63,7 +51,7 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            message: messages, 
+            messages: fullConversation,
             chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
