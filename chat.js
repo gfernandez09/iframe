@@ -97,6 +97,11 @@ function saveConversationToLocalStorage(message) {
     localStorage.setItem('conversation', JSON.stringify(conversation));
 }
 
+function getConversationFromLocalStorage() {
+    const conversation = JSON.parse(localStorage.getItem('conversation')) || [];
+    return conversation;
+}
+
 function removeTypingIndicator() {
     const messageWindow = document.getElementById('message-window');
     const typingIndicator = messageWindow.querySelector('.message.received:last-child');
@@ -104,10 +109,6 @@ function removeTypingIndicator() {
     if (typingIndicator.textContent === '...') {
         messageWindow.removeChild(typingIndicator);
     }
-}
-
-function getConversationFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('conversation')) || [];
 }
 
 // Función para borrar la conversación del almacenamiento local
