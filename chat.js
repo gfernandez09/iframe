@@ -49,13 +49,15 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
 
     console.log(fullConversation);
     
+    let messages;
+
     if (fullConversation.length === 0) {
         messages = [
             { content: userMessage, role: 'user' },
             { content: 'How can I help you?', role: 'assistant' }
         ];
     } else {
-        const conversationMessages = fullConversation.map((message) => ({ content: message.message, role: message.sender }));
+        const conversationMessages = fullConversation.map((message) => ({ content: message.content, role: message.role }));
         messages = [...conversationMessages, { content: userMessage, role: 'user' }];
     }
 
@@ -69,7 +71,7 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            message: messagesString,
+            message: messages, // Envía el arreglo de mensajes en vez de un solo mensaje
             chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
