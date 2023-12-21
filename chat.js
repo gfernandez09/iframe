@@ -40,6 +40,8 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
     const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
     
     let messagesString;
+
+    console.log(fullConversation);
     
     if (fullConversation.length === 0) {
         messages = [
@@ -52,6 +54,8 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
     }
 
     messagesString = JSON.stringify(messages);
+
+    console.log(messagesString);
     
     const response = await fetch(apiUrl, {
         method: 'POST',
