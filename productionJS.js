@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     showWelcomeMessage();
-    const chatInput = document.getElementById('chat-message');
-    chatInput.addEventListener('keypress', function (e) {
-        onEnterPress(e);
+    document.getElementById('chat-message').addEventListener('keypress', function (e) {
+        if (e.key === "Enter") {
+            sendMessage();
+        }
     });
 });
 
@@ -10,23 +11,16 @@ function showWelcomeMessage() {
     renderConversation("¡Hola! Soy el Asistente de Traveltool creado por Quonversa. ¿En qué puedo ayudarte?", 'bot');
 }
 
-function onEnterPress(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-}
-
 async function sendMessage() {
-    const input = document.getElementById('chat-message');
-    const userMessage = input.value.trim();
+    var input = document.getElementById('chat-message');
+    var userMessage = input.value.trim();
 
     if (userMessage !== '') {
         try {
             input.value = '';
             renderConversation(userMessage, 'user');
             renderConversation('...', 'bot');
-            const fullConversation = getConversationFromLocalStorage();
-            const response = await sendMessageToChatbase(userMessage, fullConversation);
+            const response = await sendMessageToChatbase(userMessage);
             removeTypingIndicator();
             renderConversation(response, 'bot');
         } catch (error) {
@@ -35,21 +29,9 @@ async function sendMessage() {
     }
 }
 
-async function sendMessageToChatbase(userMessage, fullConversation) {
+async function sendMessageToChatbase(userMessage) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
-    const apiUrl = "https://162c-79-98-220-55.ngrok-free.app/Assistant/SendMessage";
-    
-    let messages;
-    
-    if (fullConversation.length === 0) {
-        messages = [
-            { content: userMessage, role: 'user' },
-            { content: 'How can I help you?', role: 'assistant' }
-        ];
-    } else {
-        const conversationMessages = fullConversation.map((message) => ({ content: message.message, role: message.sender }));
-        messages = [...conversationMessages, { content: userMessage, role: 'user' }];
-    }
+    const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
 
     const response = await fetch(apiUrl, {
         method: 'POST',
@@ -57,11 +39,9 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            messages,
-            chatbotId,
-            stream: false,
-            model: 'gpt-3.5-turbo',
-            temperature: 0
+            chatbotId: chatbotId,
+            message: userMessage,
+            user: "user"
         })
     });
 
@@ -70,8 +50,7 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
         throw new Error(errorData.message);
     }
 
-    const data = await response.json();
-    return data.messages[0].content;
+    return await response.text();
 }
 
 function renderConversation(message, sender) {
@@ -109,8 +88,4 @@ function removeTypingIndicator() {
     if (typingIndicator.textContent === '...') {
         messageWindow.removeChild(typingIndicator);
     }
-}
-
-function getConversationFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('conversation')) || [];
 }
