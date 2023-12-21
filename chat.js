@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Vaciar la conversación al inicio
+    clearConversation();
+
+    // Llamar a la función para borrar la conversación cada 30 minutos
+    setInterval(clearConversation, 30 * 60 * 1000); // 30 minutos * 60 segundos * 1000 milisegundos
+
     showWelcomeMessage();
     const chatInput = document.getElementById('chat-message');
     chatInput.addEventListener('keypress', function (e) {
         onEnterPress(e);
-    });
+    })
 });
 
 function showWelcomeMessage() {
@@ -101,9 +107,8 @@ function createMessageElement(message, messageType, sender) {
     
     return messageDiv;
 }
-
 function saveConversationToLocalStorage(message) {
-    const conversation = JSON.parse(localStorage.getItem('conversation')) || [];
+    let conversation = JSON.parse(localStorage.getItem('conversation')) || [];
     conversation.push(message);
     localStorage.setItem('conversation', JSON.stringify(conversation));
 }
@@ -119,4 +124,10 @@ function removeTypingIndicator() {
 
 function getConversationFromLocalStorage() {
     return JSON.parse(localStorage.getItem('conversation')) || [];
+}
+
+// Función para borrar la conversación del almacenamiento local
+function clearConversation() {
+    localStorage.removeItem('conversation');
+    console.log('La conversación ha sido borrada.');
 }
