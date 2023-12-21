@@ -69,7 +69,7 @@ async function sendMessageToChatbase(userMessage, fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            messages: messagesString,
+            message: messagesString,
             chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
