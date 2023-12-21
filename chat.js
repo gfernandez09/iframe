@@ -67,8 +67,7 @@ async function sendMessageToBotAssistant(fullConversation) {
         throw new Error(errorData.message);
     }
 
-    const data = await response.json();
-    return data.messages[0].content;
+    await response.text()
 }
 
 function renderConversation(message, sender) {
