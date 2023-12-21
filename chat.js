@@ -77,7 +77,10 @@ function renderConversation(message, sender) {
     messageWindow.appendChild(messageDiv);
     messageWindow.scrollTop = messageWindow.scrollHeight;
 
-    saveConversationToLocalStorage({ message, sender });
+    let content = message;
+    let role = sender;
+
+    saveConversationToLocalStorage({ content, role });
 }
 
 function createMessageElement(message, messageType, sender) {
