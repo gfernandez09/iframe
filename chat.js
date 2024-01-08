@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Vaciar la conversación al inicio
     clearConversation();
 
-    // Llamar a la función para borrar la conversación cada 30 minutos
-    setInterval(clearConversation, 30 * 60 * 1000); // 30 minutos * 60 segundos * 1000 milisegundos
+    startConversationClearInterval();
 
     showWelcomeMessage();
     const chatInput = document.getElementById('chat-message');
@@ -44,9 +42,6 @@ async function sendMessage() {
 async function sendMessageToBotAssistant(fullConversation) {
     const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
     const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
-
-    console.log(fullConversation);
-    console.log(JSON.stringify(fullConversation));
 
     const response = await fetch(apiUrl, {
         method: 'POST',
@@ -114,8 +109,21 @@ function removeTypingIndicator() {
     }
 }
 
-// Función para borrar la conversación del almacenamiento local
-function clearConversation() {
+function clearConversation(clearChat) {
     localStorage.removeItem('conversation');
+    if (clearChat) {
+        clearChatMessages();
+    }
     console.log('La conversación ha sido borrada.');
+}
+
+function clearChatMessages() {
+    const messageWindow = document.getElementById('message-window');
+    messageWindow.innerHTML = '';
+}
+
+function startConversationClearInterval() {
+    setInterval(() => {
+        clearConversation(true);
+    }, 30 * 60 * 1000);
 }
