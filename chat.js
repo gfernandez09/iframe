@@ -40,7 +40,10 @@ async function sendMessage() {
 }
 
 async function sendMessageToBotAssistant(fullConversation) {
-    const chatbotId = "zSO6Sk6htdxWvmCn2IhXL";
+    var queryString = window.location.search;
+    var urlParams = new URLSearchParams(queryString);
+    var chatbotId = urlParams.get('chatbotId');
+
     const apiUrl = "https://bot-assistant-api-c67ioiv6sa-no.a.run.app/Assistant/SendMessage";
 
     const response = await fetch(apiUrl, {
@@ -49,11 +52,12 @@ async function sendMessageToBotAssistant(fullConversation) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            message: JSON.stringify(fullConversation),
-            chatbotId,
+            messages: fullConversation,
+            chatbotId: chatbotId,
             stream: false,
             model: 'gpt-3.5-turbo',
-            temperature: 0
+            temperature: 0,
+            conversationId: localStorage.getItem('conversationId') || null
         })
     });
 
@@ -62,8 +66,15 @@ async function sendMessageToBotAssistant(fullConversation) {
         throw new Error(errorData.message);
     }
 
-    return await response.text();
+    const responseData = await response.json();
+
+    if (responseData.conversationId && responseData.conversationId != "undefined") {
+        localStorage.setItem('conversationId', responseData.conversationId);
+    }
+
+    return responseData.text;
 }
+
 
 function renderConversation(message, sender) {
     const messageWindow = document.getElementById('message-window');
@@ -74,8 +85,9 @@ function renderConversation(message, sender) {
 
     let content = message;
     let role = sender;
-
-    saveConversationToLocalStorage({ content, role });
+    if (message != "..."){
+        saveConversationToLocalStorage({ content, role });
+    }
 }
 
 function createMessageElement(message, messageType, sender) {
