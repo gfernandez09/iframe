@@ -57,7 +57,7 @@ async function sendMessageToBotAssistant(fullConversation) {
             stream: false,
             model: 'gpt-3.5-turbo',
             temperature: 0,
-            conversationId: localStorage.getItem('conversationId') || null
+            conversationId: sessionStorage.getItem('conversationId') || null
         })
     });
 
@@ -69,7 +69,7 @@ async function sendMessageToBotAssistant(fullConversation) {
     const responseData = await response.json();
 
     if (responseData.conversationId && responseData.conversationId != "undefined") {
-        localStorage.setItem('conversationId', responseData.conversationId);
+        sessionStorage.setItem('conversationId', responseData.conversationId);
     }
 
     return responseData.text;
