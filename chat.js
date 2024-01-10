@@ -57,7 +57,7 @@ async function sendMessageToBotAssistant(fullConversation) {
             stream: false,
             model: 'gpt-3.5-turbo',
             temperature: 0,
-            conversationId: sessionStorage.getItem('conversationId') || null
+            conversationId: localStorage.getItem('conversationId') || null
         })
     });
 
@@ -69,7 +69,7 @@ async function sendMessageToBotAssistant(fullConversation) {
     const responseData = await response.json();
 
     if (responseData.conversationId && responseData.conversationId != "undefined") {
-        sessionStorage.setItem('conversationId', responseData.conversationId);
+        localStorage.setItem('conversationId', responseData.conversationId);
     }
 
     return responseData.text;
@@ -123,6 +123,7 @@ function removeTypingIndicator() {
 
 function clearConversation(clearChat) {
     localStorage.removeItem('conversation');
+    localStorage.removeItem('conversationId');
     if (clearChat) {
         clearChatMessages();
     }
